@@ -1,77 +1,102 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
+import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import {ADD} from '../store/StudentsSlice'
 
-// Modal oyna uchun stil berish
-Modal.setAppElement('#root');
+const UpdateModal = ({ isOpen, onClose, onSubmit }) => {
+    if (!isOpen) return null;
 
-const UpdateModal = ({ isOpen, onRequestClose }) => {
-  const [student, setStudent] = useState({ name: '', age: '', id: '' });
+ 
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setStudent({ ...student, [name]: value });
-  };
+    const nameRef = useRef()
+    const ageRef = useRef()
+    const idRef = useRef()
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(student); // Bu yerda student obyektini ishlatishingiz mumkin
-    onRequestClose(); // Modalni yopish
-  };
+    const dispatch = useDispatch()
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-      overlayClassName="fixed inset-0"
-    >
-      <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-        <h2 className="text-lg font-bold mb-4">Student Form</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block mb-1">Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={student.name}
-              onChange={handleChange}
-              className="border rounded w-full p-2"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-1">Age:</label>
-            <input
-              type="number"
-              name="age"
-              value={student.age}
-              onChange={handleChange}
-              className="border rounded w-full p-2"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-1">ID:</label>
-            <input
-              type="text"
-              name="id"
-              value={student.id}
-              onChange={handleChange}
-              className="border rounded w-full p-2"
-              required
-            />
-          </div>
-          <button type="submit" className="bg-blue-500 text-white rounded p-2 w-full">
-            Submit
-          </button>
-        </form>
-        <button onClick={onRequestClose} className="mt-4 text-blue-500">
-          Close
-        </button>
-      </div>
-    </Modal>
-  );
+    const handleSubmit = (event) => {
+        event.preventDefault();
+       
+        onClose();
+    };
+
+    function handleAdd(e) {
+        e.preventDefault()
+
+        let student = {
+            name: nameRef.current.value,
+            age: ageRef.current.value,
+            id: idRef.current.value
+        }
+          dispatch(ADD(student))
+
+          nameRef.current.value = ''
+          ageRef.current.value = ''
+          idRef.current.value = ''
+         
+    }
+    return (
+        <div style={styles.overlay} >
+            <div style={styles.modal} className='w-[400px] rounded-md'>
+                <h2 className='text-center text-3xl text-violet-600 mb-2'>UpdateModal</h2>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        <span className='text-2xl font-semibold text-gray-500'>Name</span>
+                        <input 
+                            className='input w-full p-2 border border-solid border-blue-300 rounded-md mt-2'
+                            type="text" 
+                            ref={nameRef}
+                            
+                        />
+                    </label>
+                    <br />
+                    <label>
+                    <span className='text-2xl font-semibold text-gray-500 '>Age</span>
+                        <input 
+                            className='input w-full p-2 border border-solid border-blue-300 rounded-md mt-2'
+                            type="number" 
+                            ref={ageRef}
+                           
+                        />
+                    </label>
+                    <br /> 
+                    <label>
+                        <span className='text-2xl font-semibold text-gray-500'>Id</span>
+                        <input 
+                            className='input w-full p-2 border border-solid border-blue-300 rounded-md mt-2'
+                            type="text" 
+                            ref={idRef}
+                            
+                        />
+                    </label>
+                    <br /><br />
+                    <button onClick={handleAdd} className='w-full bg-blue-500 py-2 rounded-md border-none text-white mb-2' type="submit">Yuborish</button>
+                    <button className='w-full bg-blue-500 py-2 rounded-md border-none text-white mb-2' type="button" onClick={onClose}>Yopish</button>
+                </form>
+            </div>
+        </div>
+    );
 };
 
 
-export default UpdateModal
+
+const styles = {
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modal: {
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+    },
+};
+
+export default UpdateModal;

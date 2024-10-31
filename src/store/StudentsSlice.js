@@ -43,6 +43,10 @@ const StudentsSlice = createSlice({
                 }
                 return value
             })
+        },
+        Update: (state, action) =>{
+            state.value = state.value.map((value) =>value.id === action.payload.id ?action.payload : value
+            )
         }
     }
  })

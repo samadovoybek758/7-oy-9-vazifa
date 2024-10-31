@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { REMOVE, CLEARE, SEARCH, CHANGEage, CHANGEname } from "./store/StudentsSlice";
 import "./App.css";
 import Modal from "./components/Modal";
+import UpdateModal from "./components/updateModal";
 
 function App() {
   const student = useSelector((state) => state.students.value);
@@ -14,6 +15,9 @@ function App() {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  const [UpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const handleOpenupdateModal = () => setUpdateModalOpen(true);
+  const handleCloseUpdateModal = () => setUpdateModalOpen(false);
  
   function deletBtn(id) {
     dispatch(REMOVE(id));
@@ -98,7 +102,10 @@ function App() {
                     deletBtn(value.id);
                   }}>delet</button>
 
-                 <button className="py-2 rounded-md bg-gray-400 text-gray-600 border-none cursor-pointer">Tahrirlash</button>
+                
+
+                  <button className="py-2 bg-purple-400 text-white border-none rounded-md" onClick={handleOpenupdateModal}>tahrirlash</button>
+                 <UpdateModal isOpen={UpdateModalOpen} onClose={handleCloseUpdateModal}></UpdateModal>
                 
               </div>
             );
