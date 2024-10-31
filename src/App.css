@@ -1,0 +1,23 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.inputs{
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.inputs input{
+  padding: 10px;
+}
+.cart{
+  display: flex;
+  flex-direction: column;
+  border: 2px solid blue;
+  padding: 15px;
+  width: 300px;
+}
